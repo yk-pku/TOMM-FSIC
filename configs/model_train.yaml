@@ -1,0 +1,49 @@
+base: []
+seed: 233
+port: 20002
+meta_train: False
+model:
+    kind: Model
+    resume:
+    sync_bn: True
+    kwargs:
+        num_classes: 52
+        embed_size: 512
+        phase: 'train'
+        text_vector_path: '/data/coco_glove_300.json'
+        topk: all
+        k_shot: 1
+        trans_config:
+            num_layers: 1
+            num_heads: 8
+            hidden_size: 512
+            mlp_dim: 1024
+            attention_dropout_rate: 0.0
+            dropout_rate: 0.1
+            channel_atten: False
+            vis: False
+dataset:
+    kind: EpisodeDataset
+    train_batch_size: 52
+    eval_batch_size: 1
+    num_workers: 2
+    kwargs:
+        phase: 'train'
+        coco_jsons: ['/data/coco2014/data_info/full_set/coco_train.json']
+        data_dir: '/data/coco2014'
+        augment: True
+        repeats: 400
+        sub_batch_size: 5
+trainer:
+    save_freq: 10
+    optimizer:
+        kind: Adam
+        kwargs: {}
+    lr_schedule:
+        start_warmup: 0.00_000_1
+        warmup_epochs: 10
+        base_lr: 0.00_01
+        final_lr: 0.00_01
+        cosine_epochs: 190
+        cosine_times: 1
+metric: {}
